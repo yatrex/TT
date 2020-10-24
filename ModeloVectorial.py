@@ -2,15 +2,13 @@ import numpy as np #Se utiliza numpy para crear arreglos ya que estos son más r
 class ModeloVectorial:
 
 	#El vocabulario debe ser una lista en el orden que se desee que esten las caracteristicas en los vectores
-	def __init__(self,rowSize,vocabulary):
+	def __init__(self):
 		self.vectors = []
 		self.vocabulary = {}
-		iniVoc(vocabulary)
+
 	def __init__(self,lists,vocabulary):
 		self.vocabulary = {}
 		self.vectors = np.array(lists)
-		iniVoc(vocabulary)
-	def iniVoc(self,vocabulary):
 		self.tamVoc = len(vocabulary)
 		#Iniciamos el diccionario con las unidades del vocabulario como clave y su ubicación en el vector como valor
 		for i in range(len(vocabulary)):
@@ -24,10 +22,8 @@ class ModeloVectorial:
 			self.vectors = nv
 
 	def contLemmas(self,lista):#Formamos la lista con la concordancia de cada lemma
-		vector = [0]*tamVoc
+		vector = [0]*self.tamVoc
 		for lemma in lista:
-			vector[vocabulary[lemma]] = vector[vocabulary[lemma]] + 1
+			vector[self.vocabulary[lemma]] = vector[self.vocabulary[lemma]] + 1
 		return vector
-
-
 
