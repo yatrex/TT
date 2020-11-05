@@ -14,6 +14,7 @@ class ModeloVectorial:
 		self.idf = []
 		self.vectors = []
 		self.tamVoc = len(vocabulary)
+		vocabulary.sort()
 		#Iniciamos el diccionario con las unidades del vocabulario como clave y su ubicación en el vector como valor
 		for i in range(len(vocabulary)):
 			self.vocabulary[vocabulary[i]] = i
@@ -28,6 +29,7 @@ class ModeloVectorial:
 				self.vocabulary[feature] = self.tamVoc + cont 
 				cont = cont + 1
 			self.tamVoc = len(self.vocabulary)
+		return newF
 	
 	def addVector(self,tf):# Agregamos un nuevo vector nuestro espacio vectorial
 		nv = np.array([tf])
@@ -59,13 +61,17 @@ class ModeloVectorial:
 
 		pass
 
-	def addFeatures(lfeatures):# Agrega una nueva caracteristica al final de de cada vector 
-		addVocab(lfeatures)#Agregamos las nuevas caracteristicas al vocabulario
-		for feature in lfeatures:
-			np.insert(self.vectores, self.vectores.shape[1], np.array([0]*len(self.vectores)), 1)
+	def addFeatures(self,lfeatures):# Agrega una nueva caracteristica al final de de cada vector 
+		lf = self.addVocab(lfeatures)#Agregamos las nuevas caracteristicas al vocabulario
+		for feature in lf:
+			n.vectors = np.insert(self.vectores, self.vectores.shape[1], np.array([0]*len(self.vectores)), 1)
 
 
-	def delFeature(feature):
-		np.delete(self.vectores,self.vocabulary[feature],axis = 1 )
-		self.vocabulary.pop(feature) 
+	def delFeature(self,feature):
+		self.vectors = np.delete(self.vectors,self.vocabulary[feature] ,axis = 1 )
+		tam = len(self.vocabulary)
+		for v in self.vocabulary.items():#Actualizamos los indices correspondientes a cada lemma
+			if(v[1] >  self.vocabulary[feature]):
+				self.vocabulary[v[0]] = self.vocabulary[v[0]] - 1
+		self.vocabulary.pop(feature)
 
