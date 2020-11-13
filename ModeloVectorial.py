@@ -20,6 +20,7 @@ class ModeloVectorial:
 			self.vocabulary[vocabulary[i]] = i
 		for lis in lists:
 			self.addVector(self.getTF(lis))
+			print(self.vectors)
 
 	def addVocab(newVocabulary):
 		newF = list(set(newVocabulary) - set(self.vocabulary.keys())) 
