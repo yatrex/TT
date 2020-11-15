@@ -38,6 +38,18 @@ class UsualTools:
 			frozen = file.read() #json.load(file)
 			obj = jsonpickle.decode(frozen)
 			return obj
+		
+		
+	@staticmethod
+	def graficaCalif(dataset):
+		calif = dataset["Promedio de estrellas"]
+		fig, ax = plt.subplots(figsize=(12, 8))
+		ax.hist(calif, density=False)
+
+		for barra in ax.patches: 
+    			height = barra.get_height()
+    			ax.annotate(f'{int(height)}', xy=(barra.get_x()+barra.get_width()/2, height), xytext=(0, 5), textcoords='offset points', ha='center', va='bottom')
+		
 	@staticmethod
 	def generaEstrellas(calif):
     
@@ -62,13 +74,26 @@ class UsualTools:
 
 	@staticmethod
 	def getLibros(addr):#Retorna una lista de objetos tipo Libro de una direcci[on dada
-		contador  = 0
-		lst = []
-		anterior = 600
-		actual = 0
 		dataset = pd.read_csv('Libros.csv')
-		lista = dataset.iloc[:,[1,3]].values
-		for lib in lista:
+		dataset = dataset.dropna(subset=['Número']) #Eliminamos las rows sin id (número)
+		lista = dataset.iloc[:,[0,3,1]].values#lista = dataset.iloc[:,[1,3]].values
+		#contador  = 0
+		star = "*"
+		lstLibros = []
+		for i in range(1,101): #(f"Libros de Goodreads/{i}.txt")
+		    for libro in lista:
+			with open(f"Libros de Goodreads/{i}.txt", errors='ignore') as file: #open('Libros de Goodreads/'+str(i)+'.txt') as file:  #open(f'{'Libros de Goodreads/'}{i}{'.txt'}')
+			    if i == libro[0]:
+				texto = file.read()
+				estrellas = UsualTools.generaEstrellas(lista[i, 1]) #generaEstrellas(lista[i, 1])
+				nuevoLibro = Libro(libro [0], libro[2], libro[1], estrellas, texto)
+				lstLibros.append(nuevoLibro)
+				#contador+=1
+				#print(f'{contador:{6}}) {nuevoLibro.id:<{8}} {nuevoLibro.nombre:<{50}}  {nuevoLibro.calif:{5}} {nuevoLibro.estrellas*star:{6}}')      
+
+
+		
+		"""for lib in lista:
 			cont = 0
 			for i in range(1,156): #(f"Libros de Goodreads/{i}.txt")
 				fname = addr+f"/{i}.txt"
@@ -83,5 +108,5 @@ class UsualTools:
 							#AQUI AJUSTAR LA CALIFICACIÓN CONFORME A LAS CLASES DEFINIDAS
 							estrellas = UsualTools.generaEstrellas(lib[1])
 							nuevoLibro = Libro(lib[0], lib[1], estrellas, x,i)
-							lst.append(nuevoLibro) 
-		return lst
+							lst.append(nuevoLibro)""" 
+		return lstLibros
